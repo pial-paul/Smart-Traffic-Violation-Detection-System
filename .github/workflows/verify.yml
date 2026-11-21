@@ -1,0 +1,79 @@
+name: Verify and package
+on:
+  pull_request:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+          cache-dependency-path: requirements.lock
+      - run: sudo apt-get update && sudo apt-get install -y tesseract-ocr-eng tesseract-ocr
+      - run: python -m pip install --require-hashes -r requirements.lock
+      - run: python -m pip install --no-deps . ruff==0.17.6
+      - run: ruff check trafficlab tests && ruff format --check trafficlab tests
+      - run: python -m unittest discover -s tests -v
+      - name: Smoke-test the optional pretrained detector on CPU
+        if: matrix.python == '3.12'
+        run: |
+          python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          python -c "import numpy as np; from trafficlab.detection import CocoDetector; assert isinstance(CocoDetector().detect(np.zeros((240, 320, 3), dtype=np.uint8)), list)"
+      - if: matrix.python == '3.12'
+        run: |
+          python -m trafficlab.experiment --out runs/ci
+          python -c "import json; t=json.load(open('runs/ci/report.json'))['totals']; assert t['tp'] >= 5 and t['fp'] == 0, t"
+      - if: matrix.python == '3.12'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: synthetic-evaluation
+          path: |
+            runs/ci/report.json
+            runs/ci/manifest.json
+
+  container:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - run: docker build -t trafficlab:ci .
+      - name: Exercise the image as its service user
+        shell: bash
+        run: |
+          docker run --rm --entrypoint python trafficlab:ci -c "import cv2, os, pytesseract; assert os.getuid() != 0; assert 'eng' in pytesseract.get_languages()"
+          export TRAFFIC_TOKEN="$(openssl rand -hex 32)"
+          export TRAFFIC_SECRET="$(openssl rand -hex 32)"
+          docker run -d --name review -p 127.0.0.1:8080:8080 -e TRAFFIC_TOKEN -e TRAFFIC_SECRET trafficlab:ci
+          trap 'docker logs review && docker rm -f review' EXIT
+          curl --fail --retry 10 --retry-connrefused http://127.0.0.1:8080/healthz
+          curl --fail -H "Authorization: Bearer $TRAFFIC_TOKEN" http://127.0.0.1:8080/api/cases
+      - name: Publish tested image for version tags
+        if: startsWith(github.ref, 'refs/tags/v') && github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ github.ref_name }}
+        run: |
+          image="ghcr.io/${GITHUB_REPOSITORY,,}:$VERSION"
+          echo "$GH_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          docker tag trafficlab:ci "$image"
+          docker push "$image"
