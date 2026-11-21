@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>{% block title %}TrafficLab{% endblock %}</title>
+  <link rel="stylesheet" href="/static/workspace.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to main content</a>
+  <header class="mast">
+    <div class="mast-inner">
+      <a class="brand" href="/" aria-label="TrafficLab home">
+        <span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        TrafficLab
+      </a>
+      {% block mast_action %}{% endblock %}
+    </div>
+  </header>
+  {% block main %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% macro utc(value) %}<time datetime="{{ value }}">{{ value[:10] }} · {{ value[11:].split('+')[0].rstrip('Z') }} UTC</time>{% endmacro %}
+{% set labels = {'pending': 'Pending', 'issued': 'Issued', 'dismissed': 'Dismissed'} %}
+{% block title %}Violation review · TrafficLab{% endblock %}
+{% block mast_action %}
+<form method="post" action="/logout">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <button class="signout" type="submit">Sign out</button>
+</form>
+{% endblock %}
+{% block main %}
+<main id="main" class="workspace">
+  <h1>Violation review</h1>
+  <nav class="filters" aria-label="Filter cases by status">
+    {% for key, name in [('', 'All cases'), ('pending', 'Pending'), ('issued', 'Issued'), ('dismissed', 'Dismissed')] %}
+    <a href="/{% if key %}?status={{ key }}{% endif %}" {% if status == key %}aria-current="page"{% endif %}>
+      {{ name }} <span>{{ counts.get(key, 0) if key else counts.values()|sum }}</span>
+    </a>
+    {% endfor %}
+  </nav>
+  {% if error %}<p role="alert" class="error">{{ error }}</p>{% endif %}
+  <div class="columns">
+    <section class="panel queue" aria-labelledby="queue-heading">
+      <h2 id="queue-heading">Case queue</h2>
+      {% if rows %}
+      <ul class="queue-list">
+        {% for case in rows %}
+        <li><a href="/?selected={{ case.id }}{% if status %}&amp;status={{ status }}{% endif %}{% if request.args.get('before') %}&amp;before={{ request.args.get('before')|urlencode }}{% endif %}#case-detail"
+               {% if selected and selected.id == case.id %}aria-current="true"{% endif %}>
+          <span class="row-title">Case #{{ case.id }} <span class="badge {{ case.status }}">{{ labels[case.status] }}</span></span>
+          <span class="camera">{{ case.confirmed_plate or case.plate or 'Unreadable plate' }} · {{ case.camera }}</span>
+          <span class="timestamp">{{ utc(case.occurred_at) }}</span>
+        </a></li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="empty">No {{ status ~ ' ' if status else '' }}cases{% if request.args.get('before') %} on this page{% endif %}.</p>
+      {% endif %}
+      {% if next_before or request.args.get('before') %}
+      <nav class="pagination" aria-label="Case pages">
+        {% if request.args.get('before') %}<a href="/{% if status %}?status={{ status }}{% endif %}">Newest cases</a>{% endif %}
+        {% if next_before %}<a href="/?before={{ next_before }}{% if status %}&amp;status={{ status }}{% endif %}">Older cases</a>{% endif %}
+      </nav>
+      {% endif %}
+    </section>
+    <section class="panel detail" id="case-detail" aria-labelledby="detail-heading">
+      {% if selected %}
+      <div class="detail-head">
+        <div>
+          <p class="eyebrow">Evidence review</p>
+          <h2 id="detail-heading">Case #{{ selected.id }}</h2>
+        </div>
+        <span class="badge {{ selected.status }}">{{ labels[selected.status] }}</span>
+      </div>
+      <figure>
+        <a href="/api/cases/{{ selected.id }}/evidence" aria-label="Open full-size evidence for case {{ selected.id }}">
+          <img src="/api/cases/{{ selected.id }}/evidence" alt="Captured stop-line evidence for case {{ selected.id }} at {{ selected.camera }}">
+        </a>
+        <figcaption><strong>{{ selected.camera }}</strong> {{ utc(selected.occurred_at) }}</figcaption>
+      </figure>
+      <dl class="facts">
+        <div><dt>Detected plate</dt><dd>{{ selected.plate or 'Unreadable' }}</dd></div>
+        <div><dt>Frame</dt><dd>{{ selected.frame }}</dd></div>
+        <div><dt>Vehicle track</dt><dd>{{ selected.track_id }}</dd></div>
+        <div><dt>Detector</dt><dd>{{ selected.detector }}</dd></div>
+      </dl>
+      <details class="provenance">
+        <summary>Evidence provenance</summary>
+        <dl>
+          <dt>Evidence SHA-256</dt><dd><code>{{ selected.evidence_sha256 }}</code></dd>
+          <dt>Source SHA-256</dt><dd><code>{{ selected.source_sha256 }}</code></dd>
+        </dl>
+      </details>
+      {% if selected.status == 'pending' %}
+      <form class="review" method="post" action="/cases/{{ selected.id }}/review">
+        <h3>Review decision</h3>
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <label for="plate">Confirmed plate <small>To issue, enter 4–12 letters or digits</small></label>
+        <input id="plate" name="plate" value="{{ selected.plate or '' }}" maxlength="12" autocapitalize="characters" autocomplete="off" spellcheck="false">
+        <label for="note">Reason for decision</label>
+        <textarea id="note" name="note" rows="2" maxlength="500" required></textarea>
+        <div class="actions">
+          <button class="primary" type="submit" name="action" value="issue">Issue challan</button>
+          <button class="secondary" type="submit" name="action" value="dismiss">Dismiss case</button>
+        </div>
+      </form>
+      {% else %}
+      <section class="review decision"><h3>Recorded decision</h3>
+        <dl>
+          {% if selected.challan %}<dt>Challan</dt><dd>{{ selected.challan }}</dd>{% endif %}
+          {% if selected.confirmed_plate %}<dt>Confirmed plate</dt><dd>{{ selected.confirmed_plate }}</dd>{% endif %}
+          <dt>Reviewed</dt><dd>{{ utc(selected.reviewed_at) }}</dd>
+          <dt>Reason</dt><dd>{{ selected.note }}</dd>
+        </dl>
+      </section>
+      {% endif %}
+      {% else %}
+      <div class="detail-head"><h2 id="detail-heading">Case evidence</h2></div>
+      <p class="empty">{{ 'Select a case to inspect its evidence.' if rows else 'Evidence appears here when a case is available.' }}</p>
+      {% endif %}
+    </section>
+  </div>
+</main>
+{% endblock %}
