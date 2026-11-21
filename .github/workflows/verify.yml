@@ -16,10 +16,10 @@ jobs:
       matrix:
         python: ['3.11', '3.12', '3.13']
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           persist-credentials: false
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
         with:
           python-version: ${{ matrix.python }}
           cache: pip
@@ -39,7 +39,7 @@ jobs:
           python -m trafficlab.experiment --out runs/ci
           python -c "import json; t=json.load(open('runs/ci/report.json'))['totals']; assert t['tp'] >= 5 and t['fp'] == 0, t"
       - if: matrix.python == '3.12'
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
           name: synthetic-evaluation
           path: |
@@ -53,7 +53,7 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           persist-credentials: false
       - run: docker build -t trafficlab:ci .
@@ -65,7 +65,7 @@ jobs:
           export TRAFFIC_SECRET="$(openssl rand -hex 32)"
           docker run -d --name review -p 127.0.0.1:8080:8080 -e TRAFFIC_TOKEN -e TRAFFIC_SECRET trafficlab:ci
           trap 'docker logs review && docker rm -f review' EXIT
-          curl --fail --retry 10 --retry-connrefused http://127.0.0.1:8080/healthz
+          curl --fail --retry 20 --retry-all-errors --retry-delay 1 --retry-max-time 40 --max-time 4 http://127.0.0.1:8080/healthz
           curl --fail -H "Authorization: Bearer $TRAFFIC_TOKEN" http://127.0.0.1:8080/api/cases
       - name: Publish tested image for version tags
         if: startsWith(github.ref, 'refs/tags/v') && github.event_name == 'push'
