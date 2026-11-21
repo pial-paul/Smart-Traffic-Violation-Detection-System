@@ -1,0 +1,354 @@
+{
+  "provenance": "Procedurally generated junction-lab v1; fixed trajectories and seed.",
+  "generated": true,
+  "environment": {
+    "python": "3.12.14",
+    "system": "Windows",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+    "opencv": "4.14.0",
+    "numpy": "2.5.5",
+    "scipy": "1.18.1",
+    "opencv_threads": 12,
+    "tesseract": "5.5.0.20241111",
+    "pytesseract": "0.3.13"
+  },
+  "ocr_enabled": true,
+  "detector": "motion",
+  "manifest_sha256": "f2a7d01ab062d7b7c43bc22c959e23cb4f7822a97e383b5c4204774b153f983a",
+  "camera_sha256": "87a288e5bad6a6b270384dbf20eeae097a82d6ec73820c8558c8b51fe17a0924",
+  "source_sha256": {
+    "config.py": "3e8cc84c9dbb1bae765cb46661c2dff91399bbc4810c36078c7eca9a28010d79",
+    "detection.py": "83a94f1c8815e02b60777a39030dd32e43cd0faf6819814504305f357f68ef55",
+    "experiment.py": "1d60b8927d8bb4615c3a459d4c2056b340febe5edc0f7223b9ad542d921ce05b",
+    "pipeline.py": "6657008217ec911fdcaa0321bc0fde4c71eb932313fc0a9e16b4d171dcac2acc",
+    "plates.py": "9c662418a50415f529dddcb65d79c4068d5e0a391e0ed67695a3f856b56a9a17",
+    "rules.py": "a72c1970df3808155e35fed56811dce38dde703ddba4839a137f29df8d87a32b",
+    "tracking.py": "3dac28a57924ba37ad9bd60f29b369af9814975d2478b73c62b1b4981f5b6714"
+  },
+  "frame_tolerance": 4,
+  "position_tolerance": 0.07,
+  "totals": {
+    "tp": 5,
+    "fp": 0,
+    "fn": 1,
+    "plate_exact": 5,
+    "plate_read": 5,
+    "plate_eligible": 5,
+    "precision": 1.0,
+    "recall": 0.8333333333333334,
+    "f1": 0.9090909090909091,
+    "plate_exact_per_labeled_match": 1.0,
+    "plate_read_per_labeled_match": 1.0,
+    "seconds": 7.1261410000079195,
+    "frames": 1152,
+    "processed_fps": 161.65832250564785
+  },
+  "scenes": [
+    {
+      "name": "daylight",
+      "expected": [
+        {
+          "frame": 70,
+          "x": 0.3515625,
+          "y": 0.5787037037037037,
+          "plate": "LAB317",
+          "vehicle_id": 1
+        }
+      ],
+      "observed": [
+        {
+          "kind": "red_light_crossing",
+          "frame": 71,
+          "track_id": 1,
+          "occurred_at": "2025-01-01T12:00:05.916+00:00",
+          "camera": "junction-lab",
+          "x": 0.3522135416666667,
+          "y": 0.5949074074074074,
+          "plate": "LAB317",
+          "detector": "motion",
+          "label": "foreground",
+          "signal": "red",
+          "approach_frame": 68
+        }
+      ],
+      "score": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "plate_eligible": 1,
+        "plate_read": 1,
+        "plate_exact": 1,
+        "matches": [
+          {
+            "expected": 0,
+            "observed": 0
+          }
+        ]
+      },
+      "frames": 144,
+      "seconds": 1.5449821000001975,
+      "signal_frames": {
+        "unknown": 4,
+        "red": 91,
+        "green": 49
+      }
+    },
+    {
+      "name": "parallel",
+      "expected": [
+        {
+          "frame": 72,
+          "x": 0.3515625,
+          "y": 0.5787037037037037,
+          "plate": "LAB317",
+          "vehicle_id": 1
+        },
+        {
+          "frame": 72,
+          "x": 0.6705729166666666,
+          "y": 0.5787037037037037,
+          "plate": "KIT429",
+          "vehicle_id": 2
+        }
+      ],
+      "observed": [
+        {
+          "kind": "red_light_crossing",
+          "frame": 73,
+          "track_id": 1,
+          "occurred_at": "2025-01-01T12:00:06.083+00:00",
+          "camera": "junction-lab",
+          "x": 0.3522135416666667,
+          "y": 0.5949074074074074,
+          "plate": "LAB317",
+          "detector": "motion",
+          "label": "foreground",
+          "signal": "red",
+          "approach_frame": 70
+        },
+        {
+          "kind": "red_light_crossing",
+          "frame": 73,
+          "track_id": 2,
+          "occurred_at": "2025-01-01T12:00:06.083+00:00",
+          "camera": "junction-lab",
+          "x": 0.6712239583333334,
+          "y": 0.5949074074074074,
+          "plate": "KIT429",
+          "detector": "motion",
+          "label": "foreground",
+          "signal": "red",
+          "approach_frame": 70
+        }
+      ],
+      "score": {
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "plate_eligible": 2,
+        "plate_read": 2,
+        "plate_exact": 2,
+        "matches": [
+          {
+            "expected": 0,
+            "observed": 0
+          },
+          {
+            "expected": 1,
+            "observed": 1
+          }
+        ]
+      },
+      "frames": 144,
+      "seconds": 1.6059538000008615,
+      "signal_frames": {
+        "unknown": 2,
+        "red": 142
+      }
+    },
+    {
+      "name": "night",
+      "expected": [
+        {
+          "frame": 74,
+          "x": 0.3515625,
+          "y": 0.5787037037037037,
+          "plate": "LAB317",
+          "vehicle_id": 1
+        }
+      ],
+      "observed": [
+        {
+          "kind": "red_light_crossing",
+          "frame": 75,
+          "track_id": 1,
+          "occurred_at": "2025-01-01T12:00:06.250+00:00",
+          "camera": "junction-lab",
+          "x": 0.3515625,
+          "y": 0.5925925925925926,
+          "plate": "LAB317",
+          "detector": "motion",
+          "label": "foreground",
+          "signal": "red",
+          "approach_frame": 73
+        }
+      ],
+      "score": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "plate_eligible": 1,
+        "plate_read": 1,
+        "plate_exact": 1,
+        "matches": [
+          {
+            "expected": 0,
+            "observed": 0
+          }
+        ]
+      },
+      "frames": 144,
+      "seconds": 1.0183447000017622,
+      "signal_frames": {
+        "unknown": 2,
+        "red": 142
+      }
+    },
+    {
+      "name": "occlusion",
+      "expected": [
+        {
+          "frame": 72,
+          "x": 0.6705729166666666,
+          "y": 0.5787037037037037,
+          "plate": "KIT429",
+          "vehicle_id": 1
+        }
+      ],
+      "observed": [
+        {
+          "kind": "red_light_crossing",
+          "frame": 73,
+          "track_id": 1,
+          "occurred_at": "2025-01-01T12:00:06.083+00:00",
+          "camera": "junction-lab",
+          "x": 0.6712239583333334,
+          "y": 0.5949074074074074,
+          "plate": "KIT429",
+          "detector": "motion",
+          "label": "foreground",
+          "signal": "red",
+          "approach_frame": 70
+        }
+      ],
+      "score": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "plate_eligible": 1,
+        "plate_read": 1,
+        "plate_exact": 1,
+        "matches": [
+          {
+            "expected": 0,
+            "observed": 0
+          }
+        ]
+      },
+      "frames": 144,
+      "seconds": 0.828411700000288,
+      "signal_frames": {
+        "unknown": 2,
+        "red": 142
+      }
+    },
+    {
+      "name": "stop-reverse",
+      "expected": [],
+      "observed": [],
+      "score": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "plate_eligible": 0,
+        "plate_read": 0,
+        "plate_exact": 0,
+        "matches": []
+      },
+      "frames": 144,
+      "seconds": 0.5021850000011909,
+      "signal_frames": {
+        "unknown": 2,
+        "red": 142
+      }
+    },
+    {
+      "name": "ambiguous",
+      "expected": [],
+      "observed": [],
+      "score": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "plate_eligible": 0,
+        "plate_read": 0,
+        "plate_exact": 0,
+        "matches": []
+      },
+      "frames": 144,
+      "seconds": 0.5392458000023908,
+      "signal_frames": {
+        "unknown": 144
+      }
+    },
+    {
+      "name": "amber",
+      "expected": [],
+      "observed": [],
+      "score": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "plate_eligible": 0,
+        "plate_read": 0,
+        "plate_exact": 0,
+        "matches": []
+      },
+      "frames": 144,
+      "seconds": 0.5318355000017618,
+      "signal_frames": {
+        "unknown": 2,
+        "amber": 142
+      }
+    },
+    {
+      "name": "hidden-crossing",
+      "expected": [
+        {
+          "frame": 72,
+          "x": 0.6705729166666666,
+          "y": 0.5787037037037037,
+          "plate": "KIT429",
+          "vehicle_id": 1
+        }
+      ],
+      "observed": [],
+      "score": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "plate_eligible": 0,
+        "plate_read": 0,
+        "plate_exact": 0,
+        "matches": []
+      },
+      "frames": 144,
+      "seconds": 0.5551823999994667,
+      "signal_frames": {
+        "unknown": 2,
+        "red": 142
+      }
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "seed": 4815,
+  "generated": true,
+  "fps": 12,
+  "provenance": "Procedurally generated junction-lab v1; fixed trajectories and seed.",
+  "camera_sha256": "87a288e5bad6a6b270384dbf20eeae097a82d6ec73820c8558c8b51fe17a0924",
+  "size": [
+    768,
+    432
+  ],
+  "codec": "MJPG",
+  "scenes": [
+    {
+      "name": "daylight",
+      "condition": "Two lanes. First car crosses red and second crosses green.",
+      "recording_start": "2025-01-01T12:00:00+00:00",
+      "file": "clips/daylight.avi",
+      "sha256": "94af94687a848917305539aed88f92facfd7d06bdf481a11e06ec7b4358ea010",
+      "annotations": "labels/daylight.json",
+      "annotation_sha256": "79b7540345deb9798f6d8bc4c9967d322da3bf94715594fcc12a11cdad3a4159",
+      "frames": 144,
+      "expected_events": [
+        {
+          "frame": 70,
+          "x": 0.3515625,
+          "y": 0.5787037037037037,
+          "plate": "LAB317",
+          "vehicle_id": 1
+        }
+      ]
+    },
+    {
+      "name": "parallel",
+      "condition": "Two simultaneous forward red crossings in different lanes.",
+      "recording_start": "2025-01-01T12:00:00+00:00",
+      "file": "clips/parallel.avi",
+      "sha256": "2a5d228fa5f636685127830a4009b3cc9473f62c0a3095e9d7bc6fe115e4bafd",
+      "annotations": "labels/parallel.json",
+      "annotation_sha256": "a2cb12c453b92658f2d463911c2a5a2f2becbb8d56fa51e460a483754f7558ec",
+      "frames": 144,
+      "expected_events": [
+        {
+          "frame": 72,
+          "x": 0.3515625,
+          "y": 0.5787037037037037,
+          "plate": "LAB317",
+          "vehicle_id": 1
+        },
+        {
+          "frame": 72,
+          "x": 0.6705729166666666,
+          "y": 0.5787037037037037,
+          "plate": "KIT429",
+          "vehicle_id": 2
+        }
+      ]
+    },
+    {
+      "name": "night",
+      "condition": "Dim illumination, sensor noise and one red crossing.",
+      "recording_start": "2025-01-01T12:00:00+00:00",
+      "file": "clips/night.avi",
+      "sha256": "ec8b4502cb7728667c3a633d73022e548a14d9f7adfe52d9b93282528cbdf487",
+      "annotations": "labels/night.json",
+      "annotation_sha256": "23e532ddcd6a36c5e6a602153c34d12dd044f59b74a106f5f3354061355e7f49",
+      "frames": 144,
+      "expected_events": [
+        {
+          "frame": 74,
+          "x": 0.3515625,
+          "y": 0.5787037037037037,
+          "plate": "LAB317",
+          "vehicle_id": 1
+        }
+      ]
+    },
+    {
+      "name": "occlusion",
+      "condition": "A fixed rectangular occluder partially covers the car before crossing.",
+      "recording_start": "2025-01-01T12:00:00+00:00",
+      "file": "clips/occlusion.avi",
+      "sha256": "622492f883c16928ec0171a7bbdf0f6a2bc7ac37b59b310479da26c3c900b68d",
+      "annotations": "labels/occlusion.json",
+      "annotation_sha256": "896ac0689c4c7f56c3161922b7dd2f0f3987f6da7b32c0fc5df645431f9e9065",
+      "frames": 144,
+      "expected_events": [
+        {
+          "frame": 72,
+          "x": 0.6705729166666666,
+          "y": 0.5787037037037037,
+          "plate": "KIT429",
+          "vehicle_id": 1
+        }
+      ]
+    },
+    {
+      "name": "stop-reverse",
+      "condition": "One car stops upstream. Another moves upstream over the line.",
+      "recording_start": "2025-01-01T12:00:00+00:00",
+      "file": "clips/stop-reverse.avi",
+      "sha256": "8c3be04f7489faa1b8fbc55671de4705f960d20add9fc9f90b2c635cdf69f70b",
+      "annotations": "labels/stop-reverse.json",
+      "annotation_sha256": "ef67ae35ee2e9c4b39ca29b45d127a4b306c87013584c0b5281f016a2d029e4e",
+      "frames": 144,
+      "expected_events": []
+    },
+    {
+      "name": "ambiguous",
+      "condition": "A conflicting red and green lamp is visible during crossing.",
+      "recording_start": "2025-01-01T12:00:00+00:00",
+      "file": "clips/ambiguous.avi",
+      "sha256": "ff6e291170150577c8c6a69e75192b37dad42d38beb65571173081f9f4f1b879",
+      "annotations": "labels/ambiguous.json",
+      "annotation_sha256": "3b90630792bc5c5ae5cd2f7040131da47ddb52d38d2b38b8a191016db3bf33dc",
+      "frames": 144,
+      "expected_events": []
+    },
+    {
+      "name": "amber",
+      "condition": "Car crosses while the signal is amber.",
+      "recording_start": "2025-01-01T12:00:00+00:00",
+      "file": "clips/amber.avi",
+      "sha256": "322e5236f9785a4773b8cfad53cce24a30f74ccab5959220334246ee53f8dec8",
+      "annotations": "labels/amber.json",
+      "annotation_sha256": "4942da312d15b2dc439e475c8312389dcb8281ed5d3af589fe3ed5ba7694f971",
+      "frames": 144,
+      "expected_events": []
+    },
+    {
+      "name": "hidden-crossing",
+      "condition": "An overhead structure completely hides the vehicle at the line.",
+      "recording_start": "2025-01-01T12:00:00+00:00",
+      "file": "clips/hidden-crossing.avi",
+      "sha256": "5e822c9bfce01309a34bb9516c8b7f37183417ef787fdc0aa761df70351df7f8",
+      "annotations": "labels/hidden-crossing.json",
+      "annotation_sha256": "896ac0689c4c7f56c3161922b7dd2f0f3987f6da7b32c0fc5df645431f9e9065",
+      "frames": 144,
+      "expected_events": [
+        {
+          "frame": 72,
+          "x": 0.6705729166666666,
+          "y": 0.5787037037037037,
+          "plate": "KIT429",
+          "vehicle_id": 1
+        }
+      ]
+    }
+  ]
+}
